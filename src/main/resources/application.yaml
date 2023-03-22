@@ -1,0 +1,14 @@
+app:
+  name: currency-telegram-bot
+server:
+  port: 8080
+bot:
+  name: "Курсы валют 💸"
+  token: 5985645195:AAHDSlL7aIGbSc2pOBiSA7z8HVXvVQZjjCo
+client:
+  rest:
+    cbr:
+      url: "https://www.cbr-xml-daily.ru/daily_utf8.xml"
+logging:
+  level:
+    root: info
