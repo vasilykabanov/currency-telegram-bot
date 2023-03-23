@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.vkabanov.currencytelegrambot.client.ApiLayerClient;
 import ru.vkabanov.currencytelegrambot.client.CbrClient;
+import ru.vkabanov.currencytelegrambot.client.CryptoCompareClient;
 import ru.vkabanov.currencytelegrambot.model.FixerLatestResponse;
+import ru.vkabanov.currencytelegrambot.model.PriceMultiResponse;
 import ru.vkabanov.currencytelegrambot.model.xmldailyrs.ValCurs;
 import ru.vkabanov.currencytelegrambot.model.xmldailyrs.Valute;
 
@@ -17,6 +19,8 @@ public class GetCurrencyRatesService {
     private final CbrClient cbrClient;
 
     private final ApiLayerClient apiLayerClient;
+
+    private final CryptoCompareClient cryptoCompareClient;
 
     public String getRubCurrency() {
         ValCurs rates = cbrClient.getCurrencyRates();
@@ -48,7 +52,15 @@ public class GetCurrencyRatesService {
                 String.format("🇨🇳 CNY/USD %s\n", response.getRates().getCny());
     }
 
-    void getCryptoCurrency() {
+    public String getCryptoCurrency() {
+        PriceMultiResponse response = cryptoCompareClient.getPriceMulti();
 
+        return "\uD83D\uDCC8 Криптовалюта\n\n" +
+                String.format("\uD83D\uDD39 Bitcoin: $%s\n", response.getBtc().getUsd()) +
+                String.format("\uD83D\uDD39 Dash: $%s\n", response.getDash().getUsd()) +
+                String.format("\uD83D\uDD39 Ethereum: $%s\n", response.getEth().getUsd()) +
+                String.format("\uD83D\uDD39 Litecoin: $%s\n", response.getLtc().getUsd()) +
+                String.format("\uD83D\uDD39 Wanchain: $%s\n", response.getWan().getUsd()) +
+                String.format("\uD83D\uDD39 Monero: $%s\n", response.getXmr().getUsd());
     }
 }

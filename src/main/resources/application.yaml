@@ -16,9 +16,11 @@ client:
   rest:
     cbr:
       url: "https://www.cbr-xml-daily.ru/daily_utf8.xml"
-    apilayer:
+    api-layer:
       url: "https://api.apilayer.com"
       apikey: "fNnjSKdqM253JT6Xe0NISuA7b1DDpqDK"
+    crypto-compare:
+      url: "https://min-api.cryptocompare.com"
 logging:
   level:
     root: info

@@ -74,7 +74,8 @@ public class CurrencyTelegramBot extends TelegramLongPollingBot {
                 case "/register" -> register(chatId);
                 case "/help" -> prepareAndSendMessage(chatId, HELP_TEXT);
                 case "\uD83C\uDDF7\uD83C\uDDFA RUB" -> prepareAndSendMessage(chatId, getCurrencyRates.getRubCurrency());
-                case "\uD83C\uDF0D  Прочие" -> prepareAndSendMessage(chatId, getCurrencyRates.getOtherCurrency());
+                case "\uD83C\uDF0D Прочие" -> prepareAndSendMessage(chatId, getCurrencyRates.getOtherCurrency());
+                case "\uD83D\uDCC8 Криптовалюта" -> prepareAndSendMessage(chatId, getCurrencyRates.getCryptoCurrency());
                 default -> prepareAndSendMessage(chatId, NOT_FOUND_COMMAND_TEXT);
             }
         } else if (update.hasCallbackQuery()) {
@@ -152,8 +153,8 @@ public class CurrencyTelegramBot extends TelegramLongPollingBot {
         row.add("\uD83C\uDDFA\uD83C\uDDE6 UAH");
         keyboardRows.add(row);
         row = new KeyboardRow();
-        row.add("\uD83C\uDF0D  Прочие");
-        row.add("Crypto");
+        row.add("\uD83C\uDF0D Прочие");
+        row.add("\uD83D\uDCC8 Криптовалюта");
         keyboardRows.add(row);
         keyboardMarkup.setKeyboard(keyboardRows);
         message.setReplyMarkup(keyboardMarkup);
