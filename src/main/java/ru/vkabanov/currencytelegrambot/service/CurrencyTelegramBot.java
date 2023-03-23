@@ -17,10 +17,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import ru.vkabanov.currencytelegrambot.client.CbrClient;
 import ru.vkabanov.currencytelegrambot.config.BotProperties;
-import ru.vkabanov.currencytelegrambot.model.xmldailyrs.ValCurs;
-import ru.vkabanov.currencytelegrambot.model.xmldailyrs.Valute;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -33,7 +30,7 @@ import java.util.List;
 public class CurrencyTelegramBot extends TelegramLongPollingBot {
 
     private final BotProperties botProperties;
-    private final CbrClient cbrClient;
+    private final GetCurrencyRatesService getCurrencyRates;
 
     private final static String START_TEXT = "Привет, %s, в этом боте ты всегда можешь узнать актуальный курс валют. :blush:";
     private final static String HELP_TEXT = "Help text....";
@@ -76,7 +73,8 @@ public class CurrencyTelegramBot extends TelegramLongPollingBot {
                 }
                 case "/register" -> register(chatId);
                 case "/help" -> prepareAndSendMessage(chatId, HELP_TEXT);
-                case "\uD83C\uDDF7\uD83C\uDDFA RUB" -> prepareAndSendMessage(chatId, getRubRates());
+                case "\uD83C\uDDF7\uD83C\uDDFA RUB" -> prepareAndSendMessage(chatId, getCurrencyRates.getRubCurrency());
+                case "\uD83C\uDF0D  Прочие" -> prepareAndSendMessage(chatId, getCurrencyRates.getOtherCurrency());
                 default -> prepareAndSendMessage(chatId, NOT_FOUND_COMMAND_TEXT);
             }
         } else if (update.hasCallbackQuery()) {
@@ -154,32 +152,12 @@ public class CurrencyTelegramBot extends TelegramLongPollingBot {
         row.add("\uD83C\uDDFA\uD83C\uDDE6 UAH");
         keyboardRows.add(row);
         row = new KeyboardRow();
-        row.add("Прочие");
+        row.add("\uD83C\uDF0D  Прочие");
         row.add("Crypto");
         keyboardRows.add(row);
         keyboardMarkup.setKeyboard(keyboardRows);
         message.setReplyMarkup(keyboardMarkup);
 
         executeMessage(message);
-    }
-
-    private String getRubRates() {
-        ValCurs rates = cbrClient.getCurrencyRates();
-        List<Valute> valutes = rates.getValute();
-
-        StringBuilder builder = new StringBuilder();
-
-        builder.append("\uD83C\uDDF7\uD83C\uDDFA Российский рубль\n\n");
-
-        valutes.forEach(i -> {
-            switch (i.getCharCode()) {
-                case "USD" -> builder.append(String.format("🇺🇸 %s/RUB %s\n", i.getCharCode(), i.getValue()));
-                case "EUR" -> builder.append(String.format("\uD83C\uDDEA\uD83C\uDDFA %s/RUB %s\n", i.getCharCode(), i.getValue()));
-                case "CNY" -> builder.append(String.format("\uD83C\uDDE8\uD83C\uDDF3 %s/RUB %s\n", i.getCharCode(), i.getValue()));
-                case "JPY" -> builder.append(String.format("\uD83C\uDDEF\uD83C\uDDF5 %s/RUB %s\n", i.getCharCode(), i.getValue()));
-            }
-        });
-
-        return builder.toString();
     }
 }

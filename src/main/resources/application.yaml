@@ -2,6 +2,13 @@ app:
   name: currency-telegram-bot
 server:
   port: 8080
+spring:
+  application:
+    name: ${app.name}
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=1000,expireAfterAccess=600s # время жизни значения после последнего обращения к нему
 bot:
   name: "Курсы валют 💸"
   token: 5985645195:AAHDSlL7aIGbSc2pOBiSA7z8HVXvVQZjjCo
@@ -9,6 +16,9 @@ client:
   rest:
     cbr:
       url: "https://www.cbr-xml-daily.ru/daily_utf8.xml"
+    apilayer:
+      url: "https://api.apilayer.com"
+      apikey: "fNnjSKdqM253JT6Xe0NISuA7b1DDpqDK"
 logging:
   level:
     root: info
